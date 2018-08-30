@@ -1,0 +1,5 @@
+name: Weather Check
+type: module
+description: 'Module for check weather on any country'
+package: Weather
+core: '8.x'
