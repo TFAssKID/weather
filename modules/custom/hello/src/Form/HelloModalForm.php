@@ -38,7 +38,7 @@ class HelloModalForm extends FormBase
     public function submitForm(array &$form, FormStateInterface $form_state) {
     }
     public function open_modal(&$form, FormStateInterface $form_state) {
-        
+
         $node_title = $form_state->getValue('node_title');
         $query = \Drupal::entityQuery('node')
             ->condition('title', $node_title, 'CONTAINS');
