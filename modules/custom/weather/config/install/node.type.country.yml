@@ -1,0 +1,14 @@
+# node.type.country.yml
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - weather # This is the name of the module we're using for this example
+name: 'Country name'
+type: country
+description: 'Content type that can be used to send information to check weather of the country'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: true
