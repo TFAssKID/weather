@@ -47,35 +47,38 @@ class WeatherForm extends FormBase {
         return 'hello_form';
     }
     public function validateForm(array &$form, FormStateInterface $form_state) {
-        $job_title = $form_state->getValue('job_title');
-        if (strlen($job_title) < 5) {
-            // Set an error for the form element with a key of "title".
-            $form_state->setErrorByName('job_title', $this->t('Your job title must be at least 5 characters long.'));
-        }
+
     }
-    public function submitForm(array &$form, FormStateInterface $form_state) {
-//
-//        $city_code = $form_state->getValue('city');
-//
-//        $response = new AjaxResponse();
-//        $title = 'Node ID';
-//        if ($id !== NULL) {
-//            $content = '<div class="test-popup-content"> Node ID is: ' . $id . '</div>';
-//            $options = array(
-//                'dialogClass' => 'popup-dialog-class',
-//                'width' => '300',
-//                'height' => '300',
-//            );
-//            $response->addCommand(new OpenModalDialogCommand($title, $content, $options));
-//        } else {
-//            $content = 'Not found record with this title <strong>' . $node_title .'</strong>';
-//            $options = array(
-//                'dialogClass' => 'popup-dialog-class',
-//                'width' => '300',
-//                'height' => '300',
-//            );
-//            $response->addCommand(new OpenModalDialogCommand($title, $content, $options)); }
-//        return $response;
+    public function submitForm(array &$form, FormStateInterface $form_state)
+    {
+
     }
+
+    public function open_modal(array &$form, FormStateInterface $form_state)
+    {
+        $weather = new WeatherController;
+
+        $city_code = $form_state->getValue('city');
+
+        $weather_status = $weather->checkWeather(
+            'http://api.openweathermap.org/data/2.5/weather',
+            array('q' => $city_code),
+            'f7f726dac4af70b5f506886e2f8c7c70'
+        );
+
+        $ajax_response = new AjaxResponse();
+        $title = 'Weather Result';
+
+        $content = '<div class="test-popup-content">'.$weather_status['#markup'].'</div>';
+        $options = array(
+            'dialogClass' => 'popup-dialog-class',
+            'width' => '300',
+            'height' => '300',
+        );
+        $ajax_response->addCommand(new OpenModalDialogCommand($title, $content, $options));
+
+        return $ajax_response;
+    }
+
 
 }
