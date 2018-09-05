@@ -56,5 +56,53 @@ LINCOLN;
         return $table;
     }
 
+    public function loadOptions(&$connection)
+    {
+        $result = $connection->query("SELECT * FROM {city}");
 
+        $options = array();
+
+        foreach ($result as $record) {
+            $options[$record->city_name.','.$record->country_code] = $record->city_name;
+        }
+
+        return $options;
+    }
+
+    public function generateInformation(&$connection)
+    {
+        $result = $connection->query("SELECT * FROM {city}");
+        $records = $result->fetchAll();
+        $num_results = count($records);
+
+        if($num_results === 0)
+        {
+            $values = [
+                [
+                    'city_name' => 'Bogota',
+                    'country_code' => 'co',
+                ],
+                [
+                    'city_name' => 'London',
+                    'country_code' => 'uk',
+                ],
+                [
+                    'city_name' => 'Cali',
+                    'country_code' => 'co',
+                ],
+                [
+                    'city_name' => 'Miami',
+                    'country_code' => 'us',
+                ],
+            ];
+
+            $query = $connection->insert('city')->fields(['city_name', 'country_code']);
+
+            foreach ($values as $record) {
+                $query->values($record);
+            }
+
+            $query->execute();
+        }
+    }
 }

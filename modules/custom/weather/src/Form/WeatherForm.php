@@ -4,19 +4,27 @@ namespace Drupal\weather\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\weather\Controller\WeatherController;
 
 class WeatherForm extends FormBase {
 
     public function buildForm(array $form, FormStateInterface $form_state) {
 
+        $weather = new WeatherController;
+
         $connection = \Drupal::database();
 
-        $this->generateInformation($connection);
+        $weather->generateInformation($connection);
 
-        $options = $this->loadOptions($connection);
+        $options = $weather->loadOptions($connection);
+
+        $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
         // Select.
-        $form['favorite'] = [
+        $form['city'] = [
             '#type' => 'select',
             '#title' => $this->t('City to check'),
             '#options' => $options,
@@ -27,7 +35,10 @@ class WeatherForm extends FormBase {
         ];
         $form['actions']['submit'] = [
             '#type' => 'submit',
-            '#value' => $this->t('Submit'),
+            '#value' => $this->t('Consult'),
+            '#ajax' => array( // here we add Ajax callback where we will process
+                'callback' => '::open_modal', // the data that came from the form and that we will receive as a result in the modal window
+            ),
         ];
 
         return $form;
@@ -43,62 +54,28 @@ class WeatherForm extends FormBase {
         }
     }
     public function submitForm(array &$form, FormStateInterface $form_state) {
-        /*
-        * This would normally be replaced by code that actually does something
-        * with the title.
-        */
-        $job_title = $form_state->getValue('job_title');
-        drupal_set_message(t('You specified a job title of %job_title.', ['%job_title' => $job_title]));
+//
+//        $city_code = $form_state->getValue('city');
+//
+//        $response = new AjaxResponse();
+//        $title = 'Node ID';
+//        if ($id !== NULL) {
+//            $content = '<div class="test-popup-content"> Node ID is: ' . $id . '</div>';
+//            $options = array(
+//                'dialogClass' => 'popup-dialog-class',
+//                'width' => '300',
+//                'height' => '300',
+//            );
+//            $response->addCommand(new OpenModalDialogCommand($title, $content, $options));
+//        } else {
+//            $content = 'Not found record with this title <strong>' . $node_title .'</strong>';
+//            $options = array(
+//                'dialogClass' => 'popup-dialog-class',
+//                'width' => '300',
+//                'height' => '300',
+//            );
+//            $response->addCommand(new OpenModalDialogCommand($title, $content, $options)); }
+//        return $response;
     }
 
-    private function loadOptions(&$connection)
-    {
-        $result = $connection->query("SELECT * FROM {city}");
-
-        $options = array();
-
-        foreach ($result as $record) {
-            $options[$record->city_name.','.$record->country_code] = $record->city_name;
-        }
-
-        return $options;
-    }
-
-    private function generateInformation(&$connection)
-    {
-        $result = $connection->query("SELECT * FROM {city}");
-        $records = $result->fetchAll();
-        $num_results = count($records);
-
-        if($num_results === 0)
-        {
-            $values = [
-                [
-                    'city_name' => 'Bogota',
-                    'country_code' => 'co',
-                ],
-                [
-                    'city_name' => 'London',
-                    'country_code' => 'uk',
-                ],
-                [
-                    'city_name' => 'Cali',
-                    'country_code' => 'co',
-                ],
-                [
-                    'city_name' => 'Miami',
-                    'country_code' => 'us',
-                ],
-            ];
-
-            $query = $connection->insert('city')->fields(['city_name', 'country_code']);
-
-            foreach ($values as $record) {
-                $query->values($record);
-            }
-
-            $query->execute();
-        }
-    }
-    
 }
