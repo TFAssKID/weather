@@ -1,12 +1,12 @@
-weather:
-  path: 'weather'
-  defaults:
-    _controller: '\Drupal\weather\Controller\WeatherController::checkWeather'
-  requirements:
-    _permission: 'access content'
+#weather:
+#  path: 'weather'
+#  defaults:
+#    _controller: '\Drupal\weather\Controller\WeatherController::test'
+#  requirements:
+#    _permission: 'access content'
 
 weather.form:
-  path: 'weather/form'
+  path: 'check_weather'
   defaults:
     _form: '\Drupal\weather\Form\WeatherForm'
     _title: 'Lets check the weather'
