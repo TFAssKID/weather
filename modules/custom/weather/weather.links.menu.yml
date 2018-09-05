@@ -1,0 +1,13 @@
+weather.check:
+  title: Check Weather!
+  menu_name: main
+  route_name: weather.check
+  expanded: TRUE
+  weight: 100
+
+weather.coo:
+  title: Coordinates!
+  menu_name: main
+  route_name: weather.coordinates
+  expanded: TRUE
+  weight: 100

@@ -5,7 +5,7 @@
 #  requirements:
 #    _permission: 'access content'
 
-weather.form:
+weather.check:
   path: 'check_weather'
   defaults:
     _form: '\Drupal\weather\Form\WeatherForm'
@@ -13,7 +13,7 @@ weather.form:
   requirements:
     _permission: 'access content'
 
-coordinates:
+weather.coordinates:
   path: 'coordinates'
   defaults:
     _controller: '\Drupal\weather\Controller\WeatherController::checkWeatherByCoo'
