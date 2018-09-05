@@ -5,12 +5,14 @@ use GuzzleHttp\Exception\ClientException;
 
 class WeatherController extends ControllerBase {
 
-    public function checkWeather()
+    public function checkWeather($url, array $parameters, $appid)
     {
         try {
 
             $client = \Drupal::httpClient();
-            $request = $client->get('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=f7f726dac4af70b5f506886e2f8c7c70');
+            $request = $client->get(
+                $this->createUrl($url, $parameters, $appid)
+            );
             $response = json_decode($request->getBody(), true);
 
             return array(
@@ -104,5 +106,14 @@ LINCOLN;
 
             $query->execute();
         }
+    }
+
+    private function createUrl($url, array $parameters, $appid)
+    {
+        $all = $url.'?'.'appid='.$appid;
+        foreach ($parameters as $key => $value) {
+            $all .='&'. $key.'='.$value;
+        }
+        return $all;
     }
 }
