@@ -29,9 +29,19 @@ class WeatherController extends ControllerBase {
 
     }
 
+    public function checkWeatherByCoo()
+    {
+        return $this->checkWeather(
+            'http://api.openweathermap.org/data/2.5/weather',
+            array('lat'=> 35, 'lon' => 139),
+            'f7f726dac4af70b5f506886e2f8c7c70'
+        );
+
+    }
+
     private function renderTable(array $resp)
     {
-        $table = <<< LINCOLN
+        $table = <<< TABLE
         <h1>{$resp['name']}</h1>
         <table>
                 <tbody>
@@ -53,7 +63,7 @@ class WeatherController extends ControllerBase {
                     </tr>
 	            </tbody>
                </table>
-LINCOLN;
+TABLE;
 
         return $table;
     }

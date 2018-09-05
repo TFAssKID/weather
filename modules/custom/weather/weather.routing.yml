@@ -12,3 +12,10 @@ weather.form:
     _title: 'Lets check the weather'
   requirements:
     _permission: 'access content'
+
+coordinates:
+  path: 'coordinates'
+  defaults:
+    _controller: '\Drupal\weather\Controller\WeatherController::checkWeatherByCoo'
+  requirements:
+    _permission: 'access content'
