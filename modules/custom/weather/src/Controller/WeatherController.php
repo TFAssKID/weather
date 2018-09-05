@@ -9,7 +9,6 @@ class WeatherController extends ControllerBase {
     {
         try {
 
-
             $client = \Drupal::httpClient();
             $request = $client->get('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=f7f726dac4af70b5f506886e2f8c7c70');
             $response = json_decode($request->getBody(), true);
@@ -28,7 +27,7 @@ class WeatherController extends ControllerBase {
 
     }
 
-    public function renderTable(array $resp)
+    private function renderTable(array $resp)
     {
         $table = <<< LINCOLN
         <h1>{$resp['name']}</h1>
@@ -56,4 +55,6 @@ LINCOLN;
 
         return $table;
     }
+
+
 }

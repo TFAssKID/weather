@@ -4,3 +4,11 @@ weather:
     _controller: '\Drupal\weather\Controller\WeatherController::checkWeather'
   requirements:
     _permission: 'access content'
+
+weather.form:
+  path: 'weather/form'
+  defaults:
+    _form: '\Drupal\weather\Form\WeatherForm'
+    _title: 'Lets check the weather'
+  requirements:
+    _permission: 'access content'
